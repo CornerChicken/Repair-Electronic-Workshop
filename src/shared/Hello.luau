@@ -1,3 +1,5 @@
-return function()
-	print("Hello, world!")
+local function testSystem(world)
+	
 end
+
+return testSystem
