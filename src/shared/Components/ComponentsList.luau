@@ -13,21 +13,22 @@ type BrokenElectronic = ComponentsTypes.BrokenElectronic
 
 export type ComponentsListType = {
     -- Components
-    Cash: Jecs.Entity<number>,
-    Multiplier: Jecs.Entity<number>,
-    Duration: Jecs.Entity<number>,
-    Chance: Jecs.Entity<number>,
-    Item: Jecs.Entity<Item>,
-    GameState: Jecs.Entity<GameState>,
-    WealthStatus: Jecs.Entity<WealthStatus>,
     BrokenElectronic: Jecs.Entity<BrokenElectronic>,
+    Cash: Jecs.Entity<number>,
+    Chance: Jecs.Entity<number>,
+    Duration: Jecs.Entity<number>,
+    GameState: Jecs.Entity<GameState>,
+    Instance: Jecs.Entity<Instance>,
+    Item: Jecs.Entity<Item>,
+    Multiplier: Jecs.Entity<number>,
     Owner: Jecs.Entity<Player>,
+    WealthStatus: Jecs.Entity<WealthStatus>,
 
     -- Tags (components with no data use nil)
-    ElectronicPart: Jecs.Entity<nil>,
-    Screwdriver: Jecs.Entity<nil>,
     Cable: Jecs.Entity<nil>,
     Cloth: Jecs.Entity<nil>,
+    ElectronicPart: Jecs.Entity<nil>,
+    Screwdriver: Jecs.Entity<nil>,
     Tools: Jecs.Entity<nil>,
     Workshop: Jecs.Entity<nil>,
 }
@@ -35,21 +36,22 @@ export type ComponentsListType = {
 local function ComponentsList(world: World)
     local list = { 
         -- Components
-        Cash = world:component() :: Jecs.Id<number>,
-        Multiplier = world:component() :: Jecs.Id<number>,
-        Duration = world:component() :: Jecs.Id<number>,
-        Chance = world:component() :: Jecs.Id<number>,
-        Item = world:component() :: Jecs.Id<Item>,
-        GameState = world:component() :: Jecs.Id<GameState>,
-        WealthStatus = world:component() :: Jecs.Id<WealthStatus>,
         BrokenElectronic = world:component() :: Jecs.Id<BrokenElectronic>,
+        Cash = world:component() :: Jecs.Id<number>,
+        Chance = world:component() :: Jecs.Id<number>,
+        Duration = world:component() :: Jecs.Id<number>,
+        GameState = world:component() :: Jecs.Id<GameState>,
+        Instance = world:component() :: Jecs.Id<Instance>,
+        Item = world:component() :: Jecs.Id<Item>,
+        Multiplier = world:component() :: Jecs.Id<number>,
         Owner = world:component() :: Jecs.Id<Player>,
+        WealthStatus = world:component() :: Jecs.Id<WealthStatus>,
 
         -- Tags
         ElectronicPart = Jecs.tag(),
-        Screwdriver = Jecs.tag(),
         Cable = Jecs.tag(),
         Cloth = Jecs.tag(),
+        Screwdriver = Jecs.tag(),
         Tools = Jecs.tag(),
         Workshop = Jecs.tag()
     } :: ComponentsListType
