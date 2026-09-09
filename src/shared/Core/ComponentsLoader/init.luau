@@ -10,19 +10,22 @@ local RunService = game:GetService("RunService")
 local Packages = ReplicatedStorage.Packages
 local jecs = require(Packages.jecs)
 
+local ComponentsList = require("../../Shared/Components/ComponentsList")
+
 local _createEntity = require("@self/_createEntity")
 
 type World = jecs.World
+type ComponentsListType = ComponentsList.ComponentsListType
 
 local COLLECTION_TAGS = require("../Data/CollectionTags")
 
 local runtimeType: "server" | "client"
 
-local function ComponentsLoader(world: World, components)
+local function ComponentsLoader(world: World, components: ComponentsListType)
     -- Figure out if this is being used by server or client
-    if RunService.IsServer() then
+    if RunService:IsServer() then
         runtimeType = "server"
-    elseif RunService.IsClient() then
+    elseif RunService:IsClient() then
         runtimeType = "client"
     end
 
@@ -40,7 +43,7 @@ local function ComponentsLoader(world: World, components)
 
         -- Remove entities when instances are removed form the game
         --  (we are assuming that all all tagged based entities require instances
-        CollectionService:GetInstanceAddedRemoved(tag):connect(function(item)
+        CollectionService:GetInstanceRemovedSignal(tag):connect(function(item)
             if runtimeType == "server" then
                 local serverId = item:GetAttribute("serverId")
                 if serverId ~= nil then
