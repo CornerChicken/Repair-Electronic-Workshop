@@ -15,11 +15,13 @@ local function _createEntity(world: World, components, tag: string, item: Instan
     --  (we are assuming that all all tagged based entities require instances
     world:add(newEntity, pair(jecs.OnDelete, jecs.Delete))
             
-     if runtimeType == "server" then
+    if runtimeType == "server" then
         item:SetAttribute("serverId", newEntity)
-     elseif runtimeType == "client" then
+    elseif runtimeType == "client" then
         item:SetAttribute("clientId", newEntity)
     end
+
+    print(string.format("[ComponentsLoader]: Created new entity for tag (%s)", tag))
 end
 
 return _createEntity
