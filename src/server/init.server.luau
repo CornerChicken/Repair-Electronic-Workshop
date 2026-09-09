@@ -2,15 +2,25 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
-local Jecs = require(ReplicatedStorage.Packages.jecs)
+local Packages = ReplicatedStorage.Packages
+local jecs = require(Packages.jecs)
+
 local SystemsRegistry = require(ReplicatedStorage.Shared.Core.SystemsRegistry)
+local ComponentsLoader = require(ReplicatedStorage.Shared.Core.ComponentsLoader)
 
-type World = Jecs.World
+local ComponentsList = require(ReplicatedStorage.Shared.Components.ComponentsList)
 
-local world: World = Jecs.world()
+type World = jecs.World
 
-RunService.Heartbeat:connect(function()
-    for _, system in pairs(SystemsRegistry) do
-        system(world)
-    end
-end)
+local world: World = jecs.world()
+
+do
+    local components = ComponentsList(world)
+    ComponentsLoader(world, components)
+
+    RunService.Heartbeat:connect(function()
+        for _, system in pairs(SystemsRegistry["server" :: "server"]) do
+            system(world, components)
+        end
+    end)
+end
