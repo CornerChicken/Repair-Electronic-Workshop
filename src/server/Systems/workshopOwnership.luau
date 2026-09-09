@@ -1,13 +1,21 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+--!strict
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local Packages = ReplicatedStorage.Packages
-local ComponentsFolder = ReplicatedStorage.Shared.Components
+local jecs = require(Packages.jecs)
 
-local Jecs = require(Packages.jecs)
+local ComponentsList = require(ReplicatedStorage.Shared.Components.ComponentsList)
 
-type World = Jecs.World
+type World = jecs.World
+type ComponentsListType = ComponentsList.ComponentsListType
 
-local function WorkshopOwnership(world: World, components)
+local isInitialized = false
+
+local function init(world: World, components: ComponentsListType)
+    print("[WorkshopOwnership]: Initializing")
+    isInitialized = true
+
     for _, player in ipairs(Players:GetPlayers()) do
         for entityId in world:query(components.Workshop)
             :without(components.Owner)
@@ -21,7 +29,9 @@ local function WorkshopOwnership(world: World, components)
         for entityId in world:query(components.Workshop)
             :without(components.Owner) 
         do
+            print("[WorkshopOwnership]: Assigned workshop to new owner " .. player.Name)
             world:set(entityId, components.Owner, player)
+            break
         end
     end)
 
@@ -32,6 +42,12 @@ local function WorkshopOwnership(world: World, components)
             end
         end
     end)
+end
+
+local function WorkshopOwnership(world, components)
+    if not isInitialized then
+        init(world, components)
+    end
 end
 
 return WorkshopOwnership
