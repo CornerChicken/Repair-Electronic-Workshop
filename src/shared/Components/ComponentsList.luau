@@ -21,7 +21,8 @@ local function ComponentsList(world: World)
         Item = world:component() :: Jecs.Id<Item>,
         GameState = world:component() :: Jecs.Id<GameState>,
         WealthStatus = world:component() :: Jecs.Id<WealthStatus>,
-        BrokenElectronic = world:component() :: Jecs.Id<BrokenElectronic>
+        BrokenElectronic = world:component() :: Jecs.Id<BrokenElectronic>,
+        Owner = world:component() :: Jecs.Id<Player>
     }
 
     return list

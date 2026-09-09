@@ -13,7 +13,8 @@ local function ComponentsTags(world: World)
         Screwdriver = Jecs.tag(),
         Cable = Jecs.tag(),
         Cloth = Jecs.tag(),
-        Tools = Jecs.tag()
+        Tools = Jecs.tag(),
+        Workshop = Jecs.tag()
     }
 
     return list
