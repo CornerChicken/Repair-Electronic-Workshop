@@ -14,6 +14,7 @@ type BrokenElectronic = ComponentsTypes.BrokenElectronic
 
 local function ComponentsList(world: World)
     local list = { 
+        -- Components
         Cash = world:component() :: Jecs.Id<number>,
         Multiplier = world:component() :: Jecs.Id<number>,
         Duration = world:component() :: Jecs.Id<number>,
@@ -22,7 +23,15 @@ local function ComponentsList(world: World)
         GameState = world:component() :: Jecs.Id<GameState>,
         WealthStatus = world:component() :: Jecs.Id<WealthStatus>,
         BrokenElectronic = world:component() :: Jecs.Id<BrokenElectronic>,
-        Owner = world:component() :: Jecs.Id<Player>
+        Owner = world:component() :: Jecs.Id<Player>,
+
+        -- Tags
+        ElectronicPart = Jecs.tag(),
+        Screwdriver = Jecs.tag(),
+        Cable = Jecs.tag(),
+        Cloth = Jecs.tag(),
+        Tools = Jecs.tag(),
+        Workshop = Jecs.tag()
     }
 
     return list
