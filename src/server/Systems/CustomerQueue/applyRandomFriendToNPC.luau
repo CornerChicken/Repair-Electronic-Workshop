@@ -18,7 +18,7 @@ local function iterPageItems(pages)
     end)
 end
 
-local function applyRandomFriendToNPC(player: Player, npcModel: Model)
+local function applyRandomFriendToNPC(player: Player)
     local friendsIds = {}
     local success, friendPages = pcall(function()
         return Players:GetFriendsAsync(player.UserId)

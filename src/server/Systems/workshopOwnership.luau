@@ -4,8 +4,6 @@ local Packages = ReplicatedStorage.Packages
 local ComponentsFolder = ReplicatedStorage.Shared.Components
 
 local Jecs = require(Packages.jecs)
-local ComponentsList = require(ComponentsFolder.ComponentsList)
-local ComponentsTags = require(ComponentsFolder.ComponentsTags)
 
 type World = Jecs.World
 
