@@ -9,7 +9,16 @@ local ComponentsTags = require(ComponentsFolder.ComponentsTags)
 
 type World = Jecs.World
 
-local function WorkshopOwnership(world: World, components) 
+local function WorkshopOwnership(world: World, components)
+    for _, player in ipairs(Players:GetPlayers()) do
+        for entityId in world:query(components.Workshop)
+            :without(components.Owner)
+        do
+            world:set(entityId, components.Owner, player)
+            break
+        end
+    end
+    
     Players.PlayerAdded:Connect(function(player)
         for entityId in world:query(components.Workshop)
             :without(components.Owner) 
