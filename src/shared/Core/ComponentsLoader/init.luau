@@ -4,7 +4,6 @@
 ]]
 
 local CollectionService = game:GetService("CollectionService")
-local InsertService = game:GetService("InsertService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
@@ -57,5 +56,6 @@ local function ComponentsLoader(world: World, components)
             end
         end)
     end
-    
 end
+
+return ComponentsLoader
