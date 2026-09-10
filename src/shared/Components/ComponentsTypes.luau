@@ -20,6 +20,7 @@ export type BrokenElectronic = {
     brokenParts: { string }
 }
 
+
 local ComponentsTypes = {}
 
 return ComponentsTypes

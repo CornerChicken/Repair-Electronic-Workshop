@@ -4,7 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
 local Packages = ReplicatedStorage.Packages
-local Jecs = require(Packages.jecs)
+local jecs = require(Packages.jecs)
 
 local ComponentsList = require(ReplicatedStorage.Shared.Components.ComponentsList)
 
@@ -13,7 +13,7 @@ local npcTemplate = Assets:FindFirstChild("npcTemplate") :: Model
 
 local applyRandomFriendToNPC = require("./applyRandomFriendToNPC")
 
-type World = Jecs.World
+type World = jecs.World
 type ComponentsListType = ComponentsList.ComponentsListType
 
 local function spawnNPC(world: World, components: ComponentsListType, workshopId: number)
