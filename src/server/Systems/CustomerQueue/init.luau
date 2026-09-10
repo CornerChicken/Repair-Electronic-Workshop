@@ -21,8 +21,6 @@ local function CustomerQueue(world, components)
     if not isInitialized then
         init(world, components)
     end
-    
-    init(world, components)
 end
 
 return CustomerQueue

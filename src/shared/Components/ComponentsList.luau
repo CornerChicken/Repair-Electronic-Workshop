@@ -1,9 +1,12 @@
 --!strict
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Packages = ReplicatedStorage.Packages
 
+local Packages = ReplicatedStorage.Packages
 local Jecs = require(Packages.jecs)
-local ComponentsTypes = require(script.Parent.ComponentsTypes)
+
+local world = require("../Core/world")
+
+local ComponentsTypes = require("./ComponentsTypes")
 
 type World = Jecs.World
 type Item = ComponentsTypes.Item
@@ -33,8 +36,7 @@ export type ComponentsListType = {
     Workshop: Jecs.Entity<nil>,
 }
 
-local function ComponentsList(world: World)
-    local list = { 
+local ComponentsList = { 
         -- Components
         BrokenElectronic = world:component() :: Jecs.Id<BrokenElectronic>,
         Cash = world:component() :: Jecs.Id<number>,
@@ -56,7 +58,4 @@ local function ComponentsList(world: World)
         Workshop = Jecs.tag()
     } :: ComponentsListType
 
-    return list
-end
-
-return ComponentsList
+return table.freeze(ComponentsList)
