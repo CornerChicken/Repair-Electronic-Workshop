@@ -16,14 +16,6 @@ local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
 type World = jecs.World
 
 do
-    for name, component in pairs(components) do
-		world:set(component, jecs.Name, name)
-	end
-
-    jabby.set_check_function(function()
-		return true
-	end)
-
 
     ComponentsLoader(world, components) 
 
@@ -31,9 +23,13 @@ do
         applet = jabby.applets.world,
         name = "world",
         configuration = {
-            world = world :: any-- put your ecs world here
+            world = world-- put your ecs world here
         }
     })
+
+    jabby.set_check_function(function()
+		return true
+	end)
 
     RunService.Heartbeat:connect(function()
         for _, system in pairs(SystemsRegistry["server" :: "server"]) do

@@ -22,6 +22,7 @@ local function init(world: World, components: ComponentsListType)
         do
             print("[WorkshopOwnership]: Assigned workshop to new owner " .. player.Name)
             world:set(entityId, components.Owner, player)
+            world:set(entityId, jecs.Name, "WorkshopEntity")
             break
         end
     end
@@ -32,6 +33,7 @@ local function init(world: World, components: ComponentsListType)
         do
             print("[WorkshopOwnership]: Assigned workshop to new owner " .. player.Name)
             world:set(entityId, components.Owner, player)
+            world:set(entityId, jecs.Name, "WorkshopEntity")
             break
         end
     end)

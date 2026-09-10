@@ -4,8 +4,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Packages = ReplicatedStorage.Packages
 local Jecs = require(Packages.jecs)
 
-local world = require("../Core/world")
-
 local ComponentsTypes = require("./ComponentsTypes")
 
 type World = Jecs.World
@@ -38,16 +36,16 @@ export type ComponentsListType = {
 
 local ComponentsList = { 
         -- Components
-        BrokenElectronic = world:component() :: Jecs.Id<BrokenElectronic>,
-        Cash = world:component() :: Jecs.Id<number>,
-        Chance = world:component() :: Jecs.Id<number>,
-        Duration = world:component() :: Jecs.Id<number>,
-        GameState = world:component() :: Jecs.Id<GameState>,
-        Instance = world:component() :: Jecs.Id<Instance>,
-        Item = world:component() :: Jecs.Id<Item>,
-        Multiplier = world:component() :: Jecs.Id<number>,
-        Owner = world:component() :: Jecs.Id<Player>,
-        WealthStatus = world:component() :: Jecs.Id<WealthStatus>,
+        BrokenElectronic = Jecs.component() :: Jecs.Id<BrokenElectronic>,
+        Cash = Jecs.component() :: Jecs.Id<number>,
+        Chance = Jecs.component() :: Jecs.Id<number>,
+        Duration = Jecs.component() :: Jecs.Id<number>,
+        GameState = Jecs.component() :: Jecs.Id<GameState>,
+        Instance = Jecs.component() :: Jecs.Id<Instance>,
+        Item = Jecs.component() :: Jecs.Id<Item>,
+        Multiplier = Jecs.component() :: Jecs.Id<number>,
+        Owner = Jecs.component() :: Jecs.Id<Player>,
+        WealthStatus = Jecs.component() :: Jecs.Id<WealthStatus>,
 
         -- Tags
         ElectronicPart = Jecs.tag(),
@@ -55,7 +53,7 @@ local ComponentsList = {
         Cloth = Jecs.tag(),
         Screwdriver = Jecs.tag(),
         Tools = Jecs.tag(),
-        Workshop = Jecs.tag()
+        Workshop = Jecs.tag(),
     } :: ComponentsListType
 
 return table.freeze(ComponentsList)
