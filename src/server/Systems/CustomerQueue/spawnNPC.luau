@@ -4,7 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
 local Packages = ReplicatedStorage.Packages
-local Jecs = require(Packages.jecs)
+local jecs = require(Packages.jecs)
 
 local world = require(ReplicatedStorage.Shared.Core.world)
 local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
