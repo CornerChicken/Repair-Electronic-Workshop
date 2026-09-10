@@ -1,18 +1,23 @@
+--!strict
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
-local Players = game:GetService("Players")
+
 local Packages = ReplicatedStorage.Packages
-local Assets = ServerStorage.Assets
-
-local npcTemplate = Assets:WaitForChild("npcTemplate")
-
 local Jecs = require(Packages.jecs)
-local applyRandomFriendToNPC = require(script.Parent.CustomerQueue.applyRandomFriendToNPC)
+
+local ComponentsList = require(ReplicatedStorage.Shared.Components.ComponentsList)
+
+local Assets = ServerStorage.Assets
+local npcTemplate = Assets:FindFirstChild("npcTemplate") :: Model
+
+local applyRandomFriendToNPC = require("./applyRandomFriendToNPC")
 
 type World = Jecs.World
+type ComponentsListType = ComponentsList.ComponentsListType
 
-local function spawnNPC(world: World, workshopId, components)
-    local player = world:get(workshopId, components.Owner)
+local function spawnNPC(world: World, components: ComponentsListType, workshopId: number)
+    local player = world:get(workshopId, components.Owner) :: Player
     local friendsIds = applyRandomFriendToNPC(player)
     
     local random = math.random(#friendsIds)
@@ -28,7 +33,7 @@ local function spawnNPC(world: World, workshopId, components)
     if success and humanoidDescription then
         local humanoid = clone:FindFirstChildOfClass("Humanoid")
         if humanoid then
-            humanoid:ApplyDescription(humanoidDescription)
+            humanoid:ApplyDescriptionAsync(humanoidDescription)
         end
     else
         warn("Failed to load appearance for UserId: " .. tostring(randomFriendId))
