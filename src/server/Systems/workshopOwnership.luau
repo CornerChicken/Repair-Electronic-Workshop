@@ -20,6 +20,7 @@ local function init(world: World, components: ComponentsListType)
         for entityId in world:query(components.Workshop)
             :without(components.Owner)
         do
+            print("[WorkshopOwnership]: Assigned workshop to new owner " .. player.Name)
             world:set(entityId, components.Owner, player)
             break
         end
