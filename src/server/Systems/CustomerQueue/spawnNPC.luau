@@ -14,7 +14,7 @@ local npcTemplate = Assets:FindFirstChild("npcTemplate") :: Model
 
 local applyRandomFriendToNPC = require("./applyRandomFriendToNPC")
 
-type World = Jecs.World
+type World = jecs.World
 type ComponentsListType = components.ComponentsListType
 
 local function spawnNPC(workshopId: number)
