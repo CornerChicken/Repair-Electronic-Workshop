@@ -13,12 +13,13 @@ local Assets = ServerStorage.Assets
 local npcTemplate = Assets:FindFirstChild("npcTemplate") :: Model
 
 local applyRandomFriendToNPC = require("./applyRandomFriendToNPC")
+local generateNPCData = require("./generateNPCData")
 
 type World = jecs.World
 type ComponentsListType = components.ComponentsListType
 
-local function spawnNPC(workshopId: number)
-    local player = world:get(workshopId, components.Owner) :: Player
+local function spawnNPC(workshopId: number, component: ComponentsListType)
+    local player = world:get(workshopId, component.Owner) :: Player
     local friendsIds = applyRandomFriendToNPC(player)
     
     local random = math.random(#friendsIds)
@@ -26,6 +27,11 @@ local function spawnNPC(workshopId: number)
 
     local clone = npcTemplate:Clone()
     clone.Parent = workspace
+
+    -- Create entity, assign component instance and owner
+    local npcId = world:entity()
+    world:set(npcId, component.Instance, clone)
+    world:set(npcId, component.Owner, player)
 
     local success, humanoidDescription = pcall(function()
         return Players:GetHumanoidDescriptionFromUserId(randomFriendId)
@@ -39,6 +45,8 @@ local function spawnNPC(workshopId: number)
     else
         warn("Failed to load appearance for UserId: " .. tostring(randomFriendId))
     end
+
+    generateNPCData(npcId, component)
     
 end
 

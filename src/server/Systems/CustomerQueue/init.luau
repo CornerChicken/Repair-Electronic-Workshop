@@ -28,7 +28,7 @@ local function CustomerQueue(world, components)
         if timeManager:search(owner.Name):timePassed(SPAWN_DELAY) then
             timeManager:deleteInterval(owner.Name)
             print("[CustomerQueue]: Spawning NPC for " .. owner.Name)
-            spawnNPC(entityId)
+            spawnNPC(entityId, components)
         end
     end
 end

@@ -1,6 +1,6 @@
 --!strict
 
-type ELECTRONICS = "OldConsole"
+type ELECTRONICS = "OldConsole" | "OldPhone"
 
 export type Item = {
     name: string,
