@@ -9,6 +9,7 @@ local ComponentsList = require(ReplicatedStorage.Shared.Components.ComponentsLis
 
 local WorkshopOwnership = require(ServerScriptService.Server.Systems.WorkshopOwnership)
 local CustomerQueue = require(ServerScriptService.Server.Systems.CustomerQueue)
+local ServerReplication = require(ServerScriptService.Server.Systems.ServerReplication)
 
 type ComponentsListType = ComponentsList.ComponentsListType
 type RuntimeType = "server" | "client" | "shared"
@@ -19,7 +20,8 @@ type World = Jecs.World
 local Systems = {
     server = {
         WorkshopOwnership = WorkshopOwnership,
-        CustomerQueue = CustomerQueue
+        CustomerQueue = CustomerQueue,
+        ServerReplication = ServerReplication
     }
 } :: { [RuntimeType]: SystemsMap } 
 
