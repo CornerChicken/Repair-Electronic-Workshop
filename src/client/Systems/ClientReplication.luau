@@ -1,6 +1,9 @@
 --!strict
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Packages = ReplicatedStorage.Packages
+local jecs = require(Packages.jecs)
+
 local Network = require(ReplicatedStorage.Shared.Core.Network)
 local ComponentRegistry = require(ReplicatedStorage.Shared.Components.ComponentRegistry)
 
@@ -8,9 +11,10 @@ local world = require(ReplicatedStorage.Shared.Core.world)
 
 local ServerToClientEntity = {}
 
-local function getClientEntity(serverEntityId: number): number
+local function getClientEntity(serverEntityId: jecs.Id | number): number
     if not ServerToClientEntity[serverEntityId] then
         ServerToClientEntity[serverEntityId] = world:entity()
+        world:add(ServerToClientEntity[serverEntityId], jecs.pair(jecs.OnDelete, jecs.Delete))
     end
 
     return ServerToClientEntity[serverEntityId]
@@ -19,7 +23,8 @@ end
 Network.WorldReplicationPacket.listen(function(entitiesList)
     for _, entityData in entitiesList do
         if entityData.isDespawned then
-            local clientEntity = getClientEntity(entityData.entityId)
+            print("[CLIENT]: DESPAWNING!")
+            local clientEntity = ServerToClientEntity[entityData.entityId]
             if clientEntity then
                 world:delete(clientEntity) -- Cleans up entity and ALL components in Jecs
                 ServerToClientEntity[entityData.entityId] = nil

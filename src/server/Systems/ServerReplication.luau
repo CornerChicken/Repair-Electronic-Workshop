@@ -3,23 +3,29 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Packages = ReplicatedStorage.Packages
 local jecs = require(Packages.jecs)
-local ByteNet = require(Packages.bytenet)
 
 local world = require(ReplicatedStorage.Shared.Core.world)
 local Network = require(ReplicatedStorage.Shared.Core.Network)
 
 local ComponentRegistry = require(ReplicatedStorage.Shared.Components.ComponentRegistry)
 
-const REPLICATED_COMPONENTS = require(ReplicatedStorage.Shared.Components.ReplicatedComponents)
-const COMPONENT_SCHEMAS = require(ReplicatedStorage.Shared.Components.ComponentSchemas)
-
+local REPLICATED_COMPONENTS = require(ReplicatedStorage.Shared.Components.ReplicatedComponents)
 
 local pendingChanges = {} :: { [jecs.Id]: { [jecs.Id]: any } }
+local despawnedEntities = {} :: { jecs.Id }
 
 -- Allow initialize function to run only once
 local hooksInitialized = false
 
-local function queueChange(componentsId: jecs.Id, entityId: jecs.Id)
+local function queueChange(componentsId: jecs.Id, entityId: jecs.Id, delete: boolean?)
+    if delete then
+        if type(pendingChanges[entityId]) == "table" then
+            table.clear(pendingChanges[entityId])
+        end
+        table.insert(despawnedEntities, entityId)
+        return
+    end
+
     if not pendingChanges[entityId] then
         pendingChanges[entityId] = {}
     end
@@ -41,9 +47,9 @@ local function initializeHooks()
             queueChange(componentId, entityId)
         end)
 
-        world:removed(componentId, function(entityId)
+        world:removed(componentId, function(entityId, _componentId, delete)
             -- world:get returns nil when removed, which is perfect for telling the client to delete it
-            queueChange(componentId, entityId) 
+            queueChange(componentId, entityId, delete) 
         end)
     end
 end
@@ -57,6 +63,23 @@ local function serverReplication()
     if next(pendingChanges) == nil then return end 
 
     local packetPayload = {} :: any
+
+    -- Add isDespawned tag
+    for index, entityId in despawnedEntities do
+        print("Entity Deleted")
+        local entityChanges = {}
+        table.insert(entityChanges, {
+            netCompId = 0,
+            isRemoved = false,
+            value = nil
+        })
+        table.insert(packetPayload, {
+                entityId = entityId,
+                isDespawned = true,
+                changes = entityChanges,
+            })
+        despawnedEntities[index] = nil
+    end
 
     for entityId, componentsMap in pendingChanges do
         local entityChanges = {}
@@ -77,12 +100,11 @@ local function serverReplication()
         if #entityChanges > 0 then
             table.insert(packetPayload, {
                 entityId = entityId,
+                isDespawned = false,
                 changes = entityChanges,
             })
         end
     end
-
-    print(packetPayload)
 
     -- Send all changes across the entire world in ONE buffer packet
     if #packetPayload > 0 then
@@ -90,9 +112,12 @@ local function serverReplication()
     end
 
     -- Send `pendingChanges` to clients using your RemoteEvent/Buffer here
-    print("Sending changes: ", pendingChanges)
+    print("Sending changes: ", packetPayload)
 
     -- Clear the queue for the next frame
+    for _entityId, componentMap in pendingChanges do
+        table.clear(componentMap)
+    end
     table.clear(pendingChanges)
 end
 
