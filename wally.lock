@@ -15,11 +15,16 @@ dependencies = [["vide", "centau/vide@0.3.1"]]
 [[package]]
 name = "callistermisquitta/repair-electronic-workshop"
 version = "0.1.0"
-dependencies = [["jabby", "alicesaidhi/jabby@0.2.3"], ["jecs", "ukendio/jecs@0.10.4"]]
+dependencies = [["bytenet", "ffrostflame/bytenet@0.4.6"], ["jabby", "alicesaidhi/jabby@0.2.3"], ["jecs", "ukendio/jecs@0.10.4"]]
 
 [[package]]
 name = "centau/vide"
 version = "0.3.1"
+dependencies = []
+
+[[package]]
+name = "ffrostflame/bytenet"
+version = "0.4.6"
 dependencies = []
 
 [[package]]
