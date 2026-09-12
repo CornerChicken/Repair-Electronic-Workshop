@@ -1,13 +1,6 @@
 --!strict
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
-local Packages = ReplicatedStorage.Packages
-local jecs = require(Packages.jecs)
-
-local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
-
 local REPLICATED_COMPONENTS = {
-    Owner = components.Owner
-} :: { [string]: jecs.Id }
+    "Owner"
+} :: { string }
 
 return REPLICATED_COMPONENTS

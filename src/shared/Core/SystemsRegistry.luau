@@ -9,7 +9,6 @@ local ComponentsList = require(ReplicatedStorage.Shared.Components.ComponentsLis
 
 local WorkshopOwnership = require(ServerScriptService.Server.Systems.WorkshopOwnership)
 local CustomerQueue = require(ServerScriptService.Server.Systems.CustomerQueue)
-local ServerReplication = require(ServerScriptService.Server.Systems.ServerReplication)
 
 type ComponentsListType = ComponentsList.ComponentsListType
 type RuntimeType = "server" | "client" | "shared"
@@ -21,7 +20,6 @@ local Systems = {
     server = {
         WorkshopOwnership = WorkshopOwnership,
         CustomerQueue = CustomerQueue,
-        ServerReplication = ServerReplication
     }
 } :: { [RuntimeType]: SystemsMap } 
 

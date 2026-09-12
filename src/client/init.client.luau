@@ -8,7 +8,7 @@ local jecs = require(Packages.jecs)
 local jabby = require(Packages.jabby)-- your path to jabby here!
 
 local Core = ReplicatedStorage.Shared.Core
-local ClientReplication = require("@self/Systems/ClientReplication")
+local NetworkingClient = require("@self/Systems/NetworkingClient")
 local ComponentsLoader = require(Core.ComponentsLoader)
 local world = require(Core.world)
 
@@ -51,6 +51,6 @@ do
         --for _, system in pairs(SystemsRegistry["server" :: "server"]) do
          --   system(world, components)
         --end
-        ClientReplication()
+        NetworkingClient(world)
     end)
 end
