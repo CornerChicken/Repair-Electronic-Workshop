@@ -7,7 +7,7 @@ local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
 
 -- Preregister Components
 do
-    for name, component in pairs(components) do
+    for name, component in components do
         jecs.meta(component, jecs.Name, name)
     end
 end

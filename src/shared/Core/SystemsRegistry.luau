@@ -19,7 +19,7 @@ type World = Jecs.World
 local Systems = {
     server = {
         WorkshopOwnership = WorkshopOwnership,
-        CustomerQueue = CustomerQueue
+        CustomerQueue = CustomerQueue,
     }
 } :: { [RuntimeType]: SystemsMap } 
 
