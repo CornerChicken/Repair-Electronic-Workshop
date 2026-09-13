@@ -1,5 +1,6 @@
 local COLLECTION_TAGS = {
-    "Workshop"
+    "Workshop",
+    "NPCSpawn"
 }
 
 return COLLECTION_TAGS 
