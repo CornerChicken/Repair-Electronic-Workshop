@@ -7,4 +7,6 @@ realm = "shared"
 [dependencies]
 jecs = "ukendio/jecs@0.10.3"
 jabby = "alicesaidhi/jabby@0.2.0"
-bytenet = "ffrostflame/bytenet@0.4.6"
+Planck = "yetanotherclown/planck@0.2.0"
+PlanckJabby = "yetanotherclown/planck-jabby@0.2.0"
+PlanckRunService = "yetanotherclown/planck-runservice@0.2.0"

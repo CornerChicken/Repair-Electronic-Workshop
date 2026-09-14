@@ -4,18 +4,17 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Packages = ReplicatedStorage.Packages
 local jecs = require(Packages.jecs)
+local Planck = require(Packages.Planck)
 
-local ComponentsList = require(ReplicatedStorage.Shared.Components.ComponentsList)
+local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
+
+local Phase = Planck.Phase.Startup
 
 type World = jecs.World
-type ComponentsListType = ComponentsList.ComponentsListType
+type ComponentsListType = components.ComponentsListType
 
-local isInitialized = false
-
-local function init(world: World, components: ComponentsListType)
+local function WorkshopOwnership(world)
     print("[WorkshopOwnership]: Initializing")
-    isInitialized = true
-
     for _, player in ipairs(Players:GetPlayers()) do
         for entityId in world:query(components.Workshop)
             :without(components.Owner)
@@ -47,10 +46,7 @@ local function init(world: World, components: ComponentsListType)
     end)
 end
 
-local function WorkshopOwnership(world, components)
-    if not isInitialized then
-        init(world, components)
-    end
-end
-
-return WorkshopOwnership
+return {
+    system = WorkshopOwnership,
+    phase = Phase.Startup,
+}

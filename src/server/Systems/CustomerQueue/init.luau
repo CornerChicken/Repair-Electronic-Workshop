@@ -3,15 +3,19 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Packages = ReplicatedStorage.Packages
 local jecs = require(Packages.jecs)
+local PlancksRunService = require(Packages.PlanckRunService)
 
 local Utilities = ReplicatedStorage.Shared.Utilities
 local TimeUtil = require(Utilities.TimeUtil)
+
+local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
 
 local TimeManager = TimeUtil.TimeManager
 
 local spawnNPC = require("@self/spawnNPC")
 local ChildOf = jecs.ChildOf
 local pair = jecs.pair
+local Phases = PlancksRunService.Phases
 
 type World = jecs.World
 type TimeInterval = TimeUtil.TimeInterval
@@ -21,9 +25,9 @@ const SPAWN_DELAY = 5 -- in seconds
 
 local timeManager = TimeManager.new(true) :: TimeManager
 
-local function CustomerQueue(world, components)
+local function CustomerQueue(world)
     -- Queries all workshops with owners
-    for entityId, _workshop, owner in world:query(components.Workshop, components.Owner) do 
+    for entityId, _workshop, owner in world:query(components.Workshop, components.Owner) do
         if not timeManager:search(owner.Name) then
             timeManager:createInterval(owner.Name)
         end
@@ -46,4 +50,7 @@ local function CustomerQueue(world, components)
     end
 end
 
-return CustomerQueue
+return {
+    system = CustomerQueue,
+    phase = Phases.Update
+}

@@ -3,11 +3,14 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Packages = ReplicatedStorage.Packages
 local jecs = require(Packages.jecs)
+local PlanckRunService = require(Packages.PlanckRunService)
 
 local Utilities = ReplicatedStorage.Shared.Utilities
 local collect = require(Utilities.collect)
 
 local remotes = require(ReplicatedStorage.Shared.Core.Network.NetworkingRemotes)
+
+local Phases = PlanckRunService.Phases
 
 type Entity = jecs.Entity<any>
 
@@ -73,7 +76,7 @@ end
 -- Collect actively updates the snapshot table per frame when the replication event fires
 local snapshots = collect(remotes.replication.OnClientEvent)
 
-return function(world: jecs.World)
+local function networkingClient(world: jecs.World)
     -- If a component in the client world is tagged with a Destroy, then destroy
 	for entity in world:each(components.Destroy) do
 		clientIds[entity] = nil
@@ -143,3 +146,7 @@ return function(world: jecs.World)
     end
 end
 
+return {
+	system = networkingClient,
+	phase = Phases.First
+}

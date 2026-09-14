@@ -23,10 +23,6 @@ type ComponentsListType = component.ComponentsListType
 
 local function spawnNPC(workshopId, components: ComponentsListType)
     local player = world:get(workshopId, components.Owner) :: Player
-    local friendsIds = applyRandomFriendToNPC(player)
-    
-    local random = math.random(#friendsIds)
-    local randomFriendId = friendsIds[random]
 
     local clone = npcTemplate:Clone()
     local Humanoid = clone:FindFirstChild("Humanoid") :: Humanoid
@@ -38,19 +34,24 @@ local function spawnNPC(workshopId, components: ComponentsListType)
     world:set(npcId, components.Owner, player)
     world:set(npcId, Jecs.Name, "NPC")
 
-    local success, humanoidDescription = pcall(function()
-        return Players:GetHumanoidDescriptionFromUserId(randomFriendId)
-    end)
+    task.spawn(function() -- Scheduler doesn't allow for script yielding
+        local friendsIds = applyRandomFriendToNPC(player) -- The :GetFriendsAsync causes yielding
+        
+        local random = math.random(#friendsIds)
+        local randomFriendId = friendsIds[random]
+        local success, humanoidDescription = pcall(function()
+            return Players:GetHumanoidDescriptionFromUserId(randomFriendId)
+        end)
 
-    if success and humanoidDescription then
-        local humanoid = clone:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            humanoid:ApplyDescriptionAsync(humanoidDescription)
+        if success and humanoidDescription then
+            local humanoid = clone:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid:ApplyDescriptionAsync(humanoidDescription)
+            end
+        else
+            warn("Failed to load appearance for UserId: " .. tostring(randomFriendId))
         end
-    else
-        warn("Failed to load appearance for UserId: " .. tostring(randomFriendId))
-    end
-
+    end)
     generateNPCData(npcId, components)
 
     for spawnPointId in world:query(components.NPCSpawn, pair(ChildOf, workshopId)) do
