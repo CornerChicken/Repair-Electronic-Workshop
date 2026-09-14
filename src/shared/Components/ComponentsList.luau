@@ -33,9 +33,10 @@ export type ComponentsListType = {
     Tools: Jecs.Entity<nil>,
     Workshop: Jecs.Entity<nil>,
     Networked: Jecs.Entity<nil>,
+    Npc: Jecs.Entity<nil>,
     NPCSpawn: Jecs.Entity<nil>,
+    Player: Jecs.Entity<Player>,
     Spawn: Jecs.Entity<nil>,
-    Npc: Jecs.Entity<nil>
 }
 
 local ComponentsList = { 
@@ -49,6 +50,7 @@ local ComponentsList = {
         Item = Jecs.component() :: Jecs.Id<Item>,
         Multiplier = Jecs.component() :: Jecs.Id<number>,
         Owner = Jecs.component() :: Jecs.Id<Player>,
+        Player = Jecs.component() :: Jecs.Id<Player>,
         WealthStatus = Jecs.component() :: Jecs.Id<WealthStatus>,
 
         -- Tags
