@@ -33,7 +33,9 @@ export type ComponentsListType = {
     Tools: Jecs.Entity<nil>,
     Workshop: Jecs.Entity<nil>,
     Networked: Jecs.Entity<nil>,
-    NPCSpawn: Jecs.Entity<nil>
+    NPCSpawn: Jecs.Entity<nil>,
+    Spawn: Jecs.Entity<nil>,
+    Npc: Jecs.Entity<nil>
 }
 
 local ComponentsList = { 
@@ -57,7 +59,9 @@ local ComponentsList = {
         Tools = Jecs.tag(),
         Workshop = Jecs.tag(),
         Networked = Jecs.tag(),
-        NPCSpawn = Jecs.tag()
+        NPCSpawn = Jecs.tag(),
+        Spawn = Jecs.tag(),
+        Npc = Jecs.tag()
     } :: ComponentsListType
 
 return table.freeze(ComponentsList)

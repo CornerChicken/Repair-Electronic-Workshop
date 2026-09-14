@@ -5,62 +5,107 @@ local ServerStorage = game:GetService("ServerStorage")
 
 local Packages = ReplicatedStorage.Packages
 local Jecs = require(Packages.jecs)
+local PlanckRunService = require(Packages.PlanckRunService)
 
-local world = require(ReplicatedStorage.Shared.Core.world)
-local component = require(ReplicatedStorage.Shared.Components.ComponentsList)
+local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
 
 local Assets = ServerStorage.Assets
 local npcTemplate = Assets:FindFirstChild("npcTemplate") :: Model
 
-local applyRandomFriendToNPC = require("./applyRandomFriendToNPC")
-local generateNPCData = require("./generateNPCData")
-
 local pair = Jecs.pair
 local ChildOf = Jecs.ChildOf
+local Phases = PlanckRunService.Phases
 
 type World = Jecs.World
-type ComponentsListType = component.ComponentsListType
 
-local function spawnNPC(workshopId, components: ComponentsListType)
-    local player = world:get(workshopId, components.Owner) :: Player
-
-    local clone = npcTemplate:Clone()
-    local Humanoid = clone:FindFirstChild("Humanoid") :: Humanoid
-    clone.Parent = workspace
-
-    -- Create entity, assign component instance and owner
-    local npcId = world:entity()
-    world:set(npcId, components.Instance, clone)
-    world:set(npcId, components.Owner, player)
-    world:set(npcId, Jecs.Name, "NPC")
-
-    task.spawn(function() -- Scheduler doesn't allow for script yielding
-        local friendsIds = applyRandomFriendToNPC(player) -- The :GetFriendsAsync causes yielding
-        
-        local random = math.random(#friendsIds)
-        local randomFriendId = friendsIds[random]
-        local success, humanoidDescription = pcall(function()
-            return Players:GetHumanoidDescriptionFromUserId(randomFriendId)
-        end)
-
-        if success and humanoidDescription then
-            local humanoid = clone:FindFirstChildOfClass("Humanoid")
-            if humanoid then
-                humanoid:ApplyDescriptionAsync(humanoidDescription)
+-- Iterate through friends pages
+local function iterPageItems(pages)
+    return coroutine.wrap(function()
+        local pagenum = 1
+        while true do
+            for _, friend in ipairs(pages:GetCurrentPage()) do
+                coroutine.yield(friend.Id)
             end
-        else
-            warn("Failed to load appearance for UserId: " .. tostring(randomFriendId))
+            if pages.IsFinished then
+                break
+            end
+            pages:AdvanceToNextPageAsync()
+            pagenum = pagenum + 1
         end
     end)
-    generateNPCData(npcId, components)
-
-    for spawnPointId in world:query(components.NPCSpawn, pair(ChildOf, workshopId)) do
-        local instance = world:get(spawnPointId, components.Instance)
-        clone:PivotTo(instance.CFrame)
-    end
-
-    Humanoid:MoveTo(Vector3.new(-28.75, 3.5, 69.625))
-    
 end
 
-return spawnNPC
+-- Get friend ids
+local function applyRandomFriendToNPC(player: Player)
+    local friendsIds = {}
+    local success, friendPages = pcall(function()
+        return Players:GetFriendsAsync(player.UserId)
+    end)
+
+    if not success then
+        warn("Failed to fetch friends.")
+    end
+
+    for id in iterPageItems(friendPages) do
+        table.insert(friendsIds, id)
+    end
+
+    return friendsIds
+end
+
+local function spawnNpc(world)
+    for spawnId, spawnTag in world:query(components.Spawn, pair(ChildOf, Jecs.Wildcard)) do
+        -- Remove spawn tag
+        world:remove(spawnId, components.Spawn)
+
+        -- Extract workshopId from pair
+        local workshopId = world:target(spawnId, ChildOf)
+        
+        -- Safety just in case a player leaves game
+        if world:has(workshopId, components.Owner) then
+            local player = world:get(workshopId, components.Owner) :: Player
+
+            local clone = npcTemplate:Clone()
+            local humanoid = clone:FindFirstChild("Humanoid") :: Humanoid
+            clone.Parent = workspace
+            
+            -- Move NPC
+            local instance = world:get(spawnId, components.Instance)
+            clone:PivotTo(instance.CFrame)
+
+            -- Create entity, assign component instance and owner
+            local npcId = world:entity()
+            world:set(npcId, components.Instance, clone)
+            world:add(npcId, components.Npc)
+            world:add(npcId, pair(ChildOf, workshopId))
+            world:set(npcId, Jecs.Name, "NPC")
+
+            -- Load NPC
+            task.spawn(function() -- Scheduler doesn't allow for script yielding
+                local friendsIds = applyRandomFriendToNPC(player) -- The :GetFriendsAsync causes yielding
+                
+                local random = math.random(#friendsIds)
+                local randomFriendId = friendsIds[random]
+                local success, humanoidDescription = pcall(function()
+                    return Players:GetHumanoidDescriptionFromUserId(randomFriendId)
+                end)
+
+                if success and humanoidDescription then
+                    
+                    if humanoid then
+                        humanoid:ApplyDescriptionAsync(humanoidDescription)
+                    end
+                else
+                    warn("Failed to load appearance for UserId: " .. tostring(randomFriendId))
+                end
+            end)
+            
+            humanoid:MoveTo(Vector3.new(-28.75, 3.5, 69.625))
+        end   
+    end
+end
+
+return {
+    system = spawnNpc,
+    phase = Phases.Update,
+}
