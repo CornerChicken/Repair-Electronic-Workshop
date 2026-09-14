@@ -9,6 +9,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Packages = ReplicatedStorage.Packages
 local jecs = require(Packages.jecs)
+local PlancksRunService = require(Packages.PlanckRunService)
 
 local Utilities = ReplicatedStorage.Shared.Utilities
 local collect = require(Utilities.collect)
@@ -17,6 +18,8 @@ local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
 
 local NetworkingTypes = require(ReplicatedStorage.Shared.Core.Network.NetworkingTypes)
 local Remotes = require(ReplicatedStorage.Shared.Core.Network.NetworkingRemotes)
+
+local Phases = PlancksRunService.Phases
 
 type World = jecs.World
 type Entity = jecs.Entity<any>
@@ -220,4 +223,7 @@ local function networkingSend(world: World)
     end  
 end
 
-return networkingSend
+return {
+    system = networkingSend,
+    phase = Phases.Last
+}

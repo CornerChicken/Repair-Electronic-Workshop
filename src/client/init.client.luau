@@ -1,56 +1,25 @@
---!strict
-local ContextActionService = game:GetService("ContextActionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
 
 local Packages = ReplicatedStorage.Packages
-local jecs = require(Packages.jecs)
-local jabby = require(Packages.jabby)-- your path to jabby here!
+local Planck = require(Packages.Planck)
 
-local Core = ReplicatedStorage.Shared.Core
-local NetworkingClient = require("@self/Systems/NetworkingClient")
-local ComponentsLoader = require(Core.ComponentsLoader)
-local world = require(Core.world)
+local startup = require(ReplicatedStorage.Shared.Core.startup)
 
-local client = jabby.obtain_client()
+type SystemTable<U...> = Planck.SystemTable<U...>
 
-local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
+local systems = {} :: SystemTable<any>
 
-type World = jecs.World
+local function addSystems(folder)
+    for _, system in folder:GetChildren() do
+        if not system:IsA("ModuleScript") then
+            continue
+        end
 
-jabby.set_check_function(function(player)
-		return true
-	end)
-
-
-local function create_widget(_, state: Enum.UserInputState)
-    if state ~= Enum.UserInputState.Begin then return end
-    client.spawn_app(client.apps.home, nil)
+        table.insert(systems, require(system))
+    end
 end
 
-ContextActionService:BindAction("Open Jabby Home", create_widget, false, Enum.KeyCode.F4)
+--addSystems(ReplicatedStorage.Shared.Systems)
+addSystems(script.Systems)
 
-
-do
-
-    ComponentsLoader(world, components) 
-
-    jabby.register({
-        applet = jabby.applets.world,
-        name = "world",
-        configuration = {
-            world = world-- put your ecs world here
-        }
-    })
-
-    jabby.set_check_function(function()
-		return true
-	end)
-
-    RunService.Heartbeat:connect(function()
-        --for _, system in pairs(SystemsRegistry["server" :: "server"]) do
-         --   system(world, components)
-        --end
-        NetworkingClient(world)
-    end)
-end
+startup(systems)

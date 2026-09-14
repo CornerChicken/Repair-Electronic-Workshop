@@ -21,6 +21,7 @@ end
 local function applyRandomFriendToNPC(player: Player)
     local friendsIds = {}
     local success, friendPages = pcall(function()
+        print(player)
         return Players:GetFriendsAsync(player.UserId)
     end)
 

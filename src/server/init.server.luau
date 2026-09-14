@@ -1,43 +1,26 @@
---!strict
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 local Packages = ReplicatedStorage.Packages
-local jecs = require(Packages.jecs)
-local jabby = require(Packages.jabby)
+local Planck = require(Packages.Planck)
 
-local Core = ReplicatedStorage.Shared.Core
-local SystemsRegistry = require(Core.SystemsRegistry)
-local ComponentsLoader = require(Core.ComponentsLoader)
-local world = require(Core.world)
+local startup = require(ReplicatedStorage.Shared.Core.startup)
 
-local NetworkingServer = require("@self/Systems/NetworkingServer")
+type SystemTable<U...> = Planck.SystemTable<U...>
 
-local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
+local systems = {} :: SystemTable<any>
 
-type World = jecs.World
-
-do
-    ComponentsLoader(world, components) 
-
-    local networkingServer = NetworkingServer(world)
-
-    jabby.register({
-        applet = jabby.applets.world,
-        name = "world",
-        configuration = {
-            world = world-- put your ecs world here
-        }
-    })
-
-    jabby.set_check_function(function()
-		return true
-	end)
-
-    RunService.Heartbeat:connect(function()
-        networkingServer()
-        for _, system in pairs(SystemsRegistry["server" :: "server"]) do
-            system(world, components)
+local function addSystems(folder)
+    for _, system in folder:GetChildren() do
+        if not system:IsA("ModuleScript") then
+            continue
         end
-    end)
+
+        table.insert(systems, require(system))
+    end
 end
+
+--addSystems(ReplicatedStorage.Shared.Systems)
+addSystems(ServerScriptService.Server.Systems)
+
+startup(systems)
