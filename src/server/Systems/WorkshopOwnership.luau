@@ -7,13 +7,14 @@ local jecs = require(Packages.jecs)
 local Planck = require(Packages.Planck)
 
 local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
+local QueueUtil = require(ReplicatedStorage.Shared.Utilities.QueueUtil)
 
 local Phase = Planck.Phase.Startup
 
 type World = jecs.World
 type ComponentsListType = components.ComponentsListType
 
-local function WorkshopOwnership(world)
+local function WorkshopOwnership(world: World)
     print("[WorkshopOwnership]: Initializing")
     for _, player in ipairs(Players:GetPlayers()) do
         for entityId in world:query(components.Workshop)
@@ -22,6 +23,7 @@ local function WorkshopOwnership(world)
             print("[WorkshopOwnership]: Assigned workshop to new owner " .. player.Name)
             world:set(entityId, components.Owner, player)
             world:set(entityId, jecs.Name, "WorkshopEntity")
+            world:set(entityId, components.NpcQueue, QueueUtil.createQueue({}))
             break
         end
     end
@@ -33,6 +35,7 @@ local function WorkshopOwnership(world)
             print("[WorkshopOwnership]: Assigned workshop to new owner " .. player.Name)
             world:set(entityId, components.Owner, player)
             world:set(entityId, jecs.Name, "WorkshopEntity")
+            world:set(entityId, components.NpcQueue, QueueUtil.createQueue({}))
             break
         end
     end)
@@ -42,6 +45,7 @@ local function WorkshopOwnership(world)
             if ownerId == player then
                 world:remove(entityId, components.Owner)
             end
+            world:remove(entityId, components.NpcQueue)
         end
     end)
 end

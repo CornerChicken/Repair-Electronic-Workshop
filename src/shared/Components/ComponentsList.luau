@@ -5,12 +5,15 @@ local Packages = ReplicatedStorage.Packages
 local Jecs = require(Packages.jecs)
 
 local ComponentsTypes = require("./ComponentsTypes")
+local QueueType = require(ReplicatedStorage.Shared.Utilities.QueueUtil)
+
 
 type World = Jecs.World
 type Item = ComponentsTypes.Item
 type GameState = ComponentsTypes.GameState
 type WealthStatus = ComponentsTypes.WealthStatus
 type BrokenElectronic = ComponentsTypes.BrokenElectronic
+type Queue = QueueType.Queue
 
 export type ComponentsListType = {
     -- Components
@@ -25,6 +28,7 @@ export type ComponentsListType = {
     Owner: Jecs.Entity<Player>,
     Player: Jecs.Entity<Player>,
     WealthStatus: Jecs.Entity<WealthStatus>,
+    NpcQueue: Jecs.Entity<Queue>,
 
     -- Tags (components with no data use nil)
     Cable: Jecs.Entity<nil>,
@@ -38,6 +42,11 @@ export type ComponentsListType = {
     NPCSpawn: Jecs.Entity<nil>,
     PlayerData: Jecs.Entity<nil>,
     Spawn: Jecs.Entity<nil>,
+<<<<<<< HEAD
+    Npc: Jecs.Entity<nil>,
+    InQueue: Jecs.Entity<nil>,
+=======
+>>>>>>> f64e2474cb81f5ca8f2681c7359339ac0fd7b34c
 }
 
 local ComponentsList = { 
@@ -53,6 +62,7 @@ local ComponentsList = {
         Owner = Jecs.component() :: Jecs.Id<Player>,
         Player = Jecs.component() :: Jecs.Id<Player>,
         WealthStatus = Jecs.component() :: Jecs.Id<WealthStatus>,
+        NpcQueue = Jecs.component() :: Jecs.Id<Queue>,
 
         -- Tags
         ElectronicPart = Jecs.tag(),
@@ -65,7 +75,8 @@ local ComponentsList = {
         NPCSpawn = Jecs.tag(),
         PlayerData = Jecs.tag(),
         Spawn = Jecs.tag(),
-        Npc = Jecs.tag()
+        Npc = Jecs.tag(),
+        InQueue = Jecs.tag(),
     } :: ComponentsListType
 
 return table.freeze(ComponentsList)
