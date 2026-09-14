@@ -18,8 +18,9 @@ local DEFAULT_CASH: number = 0
 local function createPlayerData(world: World)
     for _, player in collectEvents() do
         local playerEntity = world:entity()
-        world:set(playerEntity, jecs.Name, "PlayerData")
+        world:set(playerEntity, jecs.Name, "PlayerDataEntity")
         world:set(playerEntity, components.Player, player)
+        world:add(playerEntity, components.PlayerData)
 
         -- Add player data components here
         world:set(playerEntity, components.Cash, DEFAULT_CASH)

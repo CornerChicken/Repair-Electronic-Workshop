@@ -1,6 +1,6 @@
 --!strict
 local REPLICATED_COMPONENTS = {
-    "Cash"
+    "PlayerData", "Cash"
 } :: { string }
 
 return REPLICATED_COMPONENTS
