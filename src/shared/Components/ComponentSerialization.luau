@@ -23,7 +23,7 @@ type SerdesTable = {
 local ComponentSer: { [string]: SerdesTable } = {
     Cash = {
         serialize = function(value: number)
-            local buf = buffer.create(12)
+            local buf = buffer.create(8)
             buffer.writef64(buf, 0, value)
             print(buf)
             return buf
