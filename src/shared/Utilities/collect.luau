@@ -11,34 +11,43 @@
     is removed from the table, preventing the same logic from running on a player across
     frames.
 ]]
-local function collect(signal)
-	local enqueued = {}
+	
+type Signal<T...> = { [any]: any }
+type Cleanup = () -> ()
 
-	local i = 0
+local function collect<T...>(event: (listener: (T...) -> ()) -> Cleanup | Signal<T...>)
+	local storage = {}
+	local mt = {}
+	local iter = function()
+		local n = #storage
+		return function()
+			if n <= 0 then
+				mt.__iter = nil
+				return nil
+			end
 
-	local connection = signal:Connect(function(...)
-		table.insert(enqueued, { ... })
-		i += 1
-	end)
-
-	return function(): any
-		if i == 0 then
-			return
+			n -= 1
+			return n + 1, unpack(table.remove(storage, 1) :: any)
 		end
+	end
 
-		i -= 1
+	local disconnect
+	if type(event) == "function" then
+		disconnect = event(function(...)
+			table.insert(storage, { ... })
+			mt.__iter = iter
+		end)
+	else
+		disconnect = event:Connect(function(...)
+			table.insert(storage, { ... })
+			mt.__iter = iter
+		end)
+	end
 
-		local args: any = table.remove(enqueued, 1)
-
-		return unpack(args)
-	end, connection
+	setmetatable(storage, mt)
+	return (storage :: any) :: () -> (number, T...), function()
+		disconnect()
+	end
 end
 
-type Signal<T... = ...any> = {
-    Connect: (self: Signal<T...>, callback: (T...) -> ()) -> RBXScriptConnection,
-    ConnectParallel: (self: Signal<T...>, callback: (T...) -> ()) -> RBXScriptConnection,
-    Once: (self: Signal<T...>, callback: (T...) -> ()) -> RBXScriptConnection,
-    Wait: (self: Signal<T...>) -> (T...)
-}
-
-return collect :: <T...>(Signal<T...>) -> (() -> (T...), RBXScriptConnection)
+return collect
