@@ -1,8 +1,4 @@
---[[
-    for npc spawned through spawnNPC.luau, make them walk towards the queue part
-    Make table that stores their instance
-]]
-
+--!strict
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Packages = ReplicatedStorage.Packages
 

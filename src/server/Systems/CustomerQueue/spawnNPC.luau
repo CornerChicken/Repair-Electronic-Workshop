@@ -8,7 +8,7 @@ local Jecs = require(Packages.jecs)
 local PlanckRunService = require(Packages.PlanckRunService)
 
 local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
-local updateQueue = require("./updateQueue.luau")
+local updateQueue = require("./updateQueue")
 
 local Assets = ServerStorage.Assets
 local npcTemplate = Assets:FindFirstChild("npcTemplate") :: Model
