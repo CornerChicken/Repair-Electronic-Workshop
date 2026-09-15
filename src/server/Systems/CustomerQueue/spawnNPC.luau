@@ -64,7 +64,7 @@ local function spawnNpc(world: World)
         local npcQueue = world:get(workshopId, components.NpcQueue)
         
         -- Safety just in case a player leaves game
-        if world:has(workshopId, components.Owner) and QueueUtil.size(npcQueue) <= 3 then
+        if world:has(workshopId, components.Owner) and QueueUtil.size(npcQueue) < 3 then
             local player = world:get(workshopId, components.Owner) :: Player
 
             local clone = npcTemplate:Clone()
@@ -101,8 +101,6 @@ local function spawnNpc(world: World)
                     warn("Failed to load appearance for UserId: " .. tostring(randomFriendId))
                 end
             end)
-            
-            humanoid:MoveTo(Vector3.new(-28.75, 3.5, 69.625))
         end   
     end
 end
