@@ -1,6 +1,0 @@
-{
-    "aliases": {
-        "replecs": "../src/",
-        "pkg": "../luau_packages/"
-    }
-}
