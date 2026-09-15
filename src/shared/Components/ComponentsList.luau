@@ -42,10 +42,7 @@ export type ComponentsListType = {
     NPCSpawn: Jecs.Entity<nil>,
     PlayerData: Jecs.Entity<nil>,
     Spawn: Jecs.Entity<nil>,
-<<<<<<< HEAD
     Npc: Jecs.Entity<nil>,
-=======
->>>>>>> 770ce27c73249312e70ccce7c0dda19846da0d7b
     InQueue: Jecs.Entity<nil>,
 }
 
