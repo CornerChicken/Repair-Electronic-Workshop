@@ -4,13 +4,13 @@ registry = "test"
 
 [[package]]
 name = "alicesaidhi/jabby"
-version = "0.2.3"
-dependencies = [["jecs", "ukendio/jecs@0.6.1"], ["pebble", "alicesaidhi/pebble@0.1.2"], ["vide", "centau/vide@0.3.1"]]
+version = "0.3.1"
+dependencies = [["jecs", "ukendio/jecs@0.8.3"], ["pebble", "alicesaidhi/pebble@0.1.2"], ["vide", "centau/vide@0.3.1"]]
 
 [[package]]
 name = "alicesaidhi/jabby"
-version = "0.3.1"
-dependencies = [["jecs", "ukendio/jecs@0.8.3"], ["pebble", "alicesaidhi/pebble@0.1.2"], ["vide", "centau/vide@0.3.1"]]
+version = "0.6.1"
+dependencies = [["jecs", "ukendio/jecs@0.11.0"], ["pebble", "alicesaidhi/pebble@0.2.0"], ["vide", "centau/vide@0.4.1"]]
 
 [[package]]
 name = "alicesaidhi/pebble"
@@ -18,9 +18,14 @@ version = "0.1.2"
 dependencies = [["vide", "centau/vide@0.3.1"]]
 
 [[package]]
+name = "alicesaidhi/pebble"
+version = "0.2.0"
+dependencies = [["vide", "centau/vide@0.4.1"]]
+
+[[package]]
 name = "callistermisquitta/repair-electronic-workshop"
 version = "0.1.0"
-dependencies = [["Planck", "yetanotherclown/planck@0.2.0"], ["PlanckJabby", "yetanotherclown/planck-jabby@0.2.0"], ["PlanckRunService", "yetanotherclown/planck-runservice@0.2.0"], ["jabby", "alicesaidhi/jabby@0.2.3"], ["jecs", "ukendio/jecs@0.10.4"], ["replecs", "pepeeltoro41/replecs@0.0.2"]]
+dependencies = [["Fusion", "elttob/fusion@0.3.0"], ["Planck", "yetanotherclown/planck@0.2.0"], ["PlanckJabby", "yetanotherclown/planck-jabby@0.2.0"], ["PlanckRunService", "yetanotherclown/planck-runservice@0.2.0"], ["jabby", "alicesaidhi/jabby@0.6.1"], ["jecs", "ukendio/jecs@0.11.0"], ["replecs", "pepeeltoro41/replecs@0.4.0-rc.3"]]
 
 [[package]]
 name = "centau/vide"
@@ -28,14 +33,19 @@ version = "0.3.1"
 dependencies = []
 
 [[package]]
-name = "pepeeltoro41/replecs"
-version = "0.0.2"
-dependencies = [["jecs", "ukendio/jecs@0.8.3"]]
+name = "centau/vide"
+version = "0.4.1"
+dependencies = []
 
 [[package]]
-name = "ukendio/jecs"
-version = "0.6.1"
+name = "elttob/fusion"
+version = "0.3.0"
 dependencies = []
+
+[[package]]
+name = "pepeeltoro41/replecs"
+version = "0.4.0-rc.3"
+dependencies = [["jecs", "ukendio/jecs@0.11.0"]]
 
 [[package]]
 name = "ukendio/jecs"
@@ -44,7 +54,7 @@ dependencies = []
 
 [[package]]
 name = "ukendio/jecs"
-version = "0.10.4"
+version = "0.11.0"
 dependencies = []
 
 [[package]]
