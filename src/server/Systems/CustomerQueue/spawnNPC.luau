@@ -8,7 +8,7 @@ local Jecs = require(Packages.jecs)
 local PlanckRunService = require(Packages.PlanckRunService)
 
 local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
-local updateQueue = require("./updateQueue")
+local QueueUtil = require(ReplicatedStorage.Shared.Utilities.QueueUtil)
 
 local Assets = ServerStorage.Assets
 local npcTemplate = Assets:FindFirstChild("npcTemplate") :: Model
@@ -54,16 +54,17 @@ local function applyRandomFriendToNPC(player: Player)
     return friendsIds
 end
 
-local function spawnNpc(world)
+local function spawnNpc(world: World)
     for spawnId, spawnTag in world:query(components.Spawn, pair(ChildOf, Jecs.Wildcard)) do
         -- Remove spawn tag
         world:remove(spawnId, components.Spawn)
 
         -- Extract workshopId from pair
         local workshopId = world:target(spawnId, ChildOf)
+        local npcQueue = world:get(workshopId, components.NpcQueue)
         
         -- Safety just in case a player leaves game
-        if world:has(workshopId, components.Owner) then
+        if world:has(workshopId, components.Owner) and QueueUtil.size(npcQueue) <= 3 then
             local player = world:get(workshopId, components.Owner) :: Player
 
             local clone = npcTemplate:Clone()
