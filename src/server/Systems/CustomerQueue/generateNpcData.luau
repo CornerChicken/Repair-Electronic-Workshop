@@ -2,6 +2,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Packages = ReplicatedStorage.Packages
+local jecs = require(Packages.jecs)
 local PlanckRunService = require(Packages.PlanckRunService)
 
 local deviceData = require(ReplicatedStorage.Shared.Data.DeviceData)
@@ -13,13 +14,15 @@ local Phases = PlanckRunService.Phases
 type ComponentsListType = components.ComponentsListType
 type BrokenElectronic = componentsTypes.BrokenElectronic
 
+type World = jecs.World
+
 local deviceNames = {}
    
 for deviceName in deviceData do
     table.insert(deviceNames, deviceName)
 end
 
-local function generateNpcData(world)
+local function generateNpcData(world: World)
     for npcId in world:query(components.Npc):without(components.BrokenElectronic) do
         world:set(npcId, components.BrokenElectronic)
 

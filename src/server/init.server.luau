@@ -4,6 +4,11 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Packages = ReplicatedStorage.Packages
 local Planck = require(Packages.Planck)
 
+require(ReplicatedStorage.Shared.Core.world)
+
+local replicator = require("@self/Core/replicator")
+replicator:init()
+
 local startup = require(ReplicatedStorage.Shared.Core.startup)
 
 type SystemTable<U...> = Planck.SystemTable<U...>

@@ -26,6 +26,7 @@ export type ComponentsListType = {
     Item: Jecs.Entity<Item>,
     Multiplier: Jecs.Entity<number>,
     Owner: Jecs.Entity<Player>,
+    Player: Jecs.Entity<Player>,
     WealthStatus: Jecs.Entity<WealthStatus>,
     NpcQueue: Jecs.Entity<Queue>,
 
@@ -39,9 +40,12 @@ export type ComponentsListType = {
     Networked: Jecs.Entity<nil>,
     Npc: Jecs.Entity<nil>,
     NPCSpawn: Jecs.Entity<nil>,
-    Player: Jecs.Entity<Player>,
+    PlayerData: Jecs.Entity<nil>,
     Spawn: Jecs.Entity<nil>,
+<<<<<<< HEAD
     Npc: Jecs.Entity<nil>,
+=======
+>>>>>>> 770ce27c73249312e70ccce7c0dda19846da0d7b
     InQueue: Jecs.Entity<nil>,
 }
 
@@ -69,6 +73,7 @@ local ComponentsList = {
         Workshop = Jecs.tag(),
         Networked = Jecs.tag(),
         NPCSpawn = Jecs.tag(),
+        PlayerData = Jecs.tag(),
         Spawn = Jecs.tag(),
         Npc = Jecs.tag(),
         InQueue = Jecs.tag(),

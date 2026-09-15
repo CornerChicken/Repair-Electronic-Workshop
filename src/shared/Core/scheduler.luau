@@ -7,7 +7,6 @@ local Planck = require(Packages.Planck)
 local world = require("./world")
 
 local Scheduler = Planck.Scheduler
-local onEvent = Planck.onEvent
 
 local PlanckJabby = require(Packages.PlanckJabby)
 local jabbyPlugin = PlanckJabby.new()

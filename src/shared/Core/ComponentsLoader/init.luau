@@ -10,18 +10,18 @@ local RunService = game:GetService("RunService")
 local Packages = ReplicatedStorage.Packages
 local jecs = require(Packages.jecs)
 
-local ComponentsList = require("../../Shared/Components/ComponentsList")
+local components = require("../../Shared/Components/ComponentsList")
 
 local _createEntity = require("@self/_createEntity")
 
 type World = jecs.World
-type ComponentsListType = ComponentsList.ComponentsListType
+type ComponentsListType = components.ComponentsListType
 
 local COLLECTION_TAGS = require("../Data/CollectionTags")
 
 local runtimeType: "server" | "client"
 
-local function ComponentsLoader(world: World, components: ComponentsListType)
+local function ComponentsLoader(world: World)
     -- Figure out if this is being used by server or client
     if RunService:IsServer() then
         runtimeType = "server"

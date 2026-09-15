@@ -14,10 +14,12 @@ local world = require(Core.world)
 local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
 local scheduler = require(ReplicatedStorage.Shared.Core.scheduler)
 
+require(ReplicatedStorage.Shared.Components.ComponentSerialization)
+
 type World = jecs.World
 
 return function(systems)
-    ComponentsLoader(world, components) 
+    ComponentsLoader(world) 
 
     -- Load systems into scheduler
     if #systems ~= 0 then
