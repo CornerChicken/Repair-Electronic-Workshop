@@ -8,11 +8,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Packages = ReplicatedStorage.Packages
 local jecs = require(Packages.jecs)
-local PlanckRunService = require(Packages.PlanckRunService)
+local Planck = require(Packages.Planck)
 
 local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
 
-local Phases = PlanckRunService.Phases
+local Phase = Planck.Phase
 
 type World = jecs.World
 
@@ -37,5 +37,5 @@ end
 
 return {
     system = updateCash,
-    phase = Phases.Startup
+    phase = Phase.Startup
 }
