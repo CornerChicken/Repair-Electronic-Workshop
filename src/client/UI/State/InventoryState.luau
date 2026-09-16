@@ -3,8 +3,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Packages = ReplicatedStorage.Packages
 local Fusion = require(Packages.Fusion)
 
-local START_TAB = "RAM"
-local START_ISOPEN = true
+local START_TAB = "CPU"
+local START_ISOPEN = false
 
 export type InventoryData = {
 	RAM: { [number]: any },
