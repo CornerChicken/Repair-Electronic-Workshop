@@ -1,10 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Fusion = require(ReplicatedStorage.Packages.Fusion)
 
-local New = Fusion.New
-local Value = Fusion.Value
-local Computed = Fusion.Computed
-local Spring = Fusion.Spring
 local Children = Fusion.Children
 local OnEvent = Fusion.OnEvent
 
@@ -16,24 +12,57 @@ export type ItemData = {
 	Icon: string?,
 }
 
-export type SlotProps = {
-	Index: number,
-	Data: ItemData,
-	OnClick: ((itemData: ItemData) -> ())?,
-}
+type UsedAs<T> = Fusion.UsedAs<T>
+type Scope = Fusion.Scope<any>
 
-local function ItemSlot(props: SlotProps)
-	local itemData = props.Data
-	local isHovered = Value(false)
+local TEXT_FONT = Font.fromEnum(Enum.Font.FredokaOne)
+
+local ITEM_SLOT_BACKGROUND_COLOR = Color3.fromRGB(35, 42, 68)
+
+local TIER_TAG_SIZE = UDim2.fromScale(0.357, 0.129)
+local TIER_TAG_POSITION = UDim2.fromScale(0.043, 0.043)
+local TIER_TAG_BACKGROUND_COLOR3 = Color3.fromRGB(50, 60, 90)
+local TIER_TAG_DEFAULT_TEXT = "T1"
+local TIER_TAG_TEXT_COLOR3 = Color3.fromRGB(200, 220, 255)
+local TIER_TAG_TEXT_SIZE = 11
+
+local DISPLAY_SIZE = UDim2.fromScale(0.914, 0.214)
+local DISPLAY_POSITION = UDim2.fromScale(0.043, 0.429)
+local DISPLAY_DEFUALT_TEXT = "Unknown Item"
+local DISPLAY_TEXT_COLOR3 = Color3.fromRGB(255, 255, 255)
+local DISPLAY_TEXT_SIZE = 13
+
+local RARITY_FRAME_SIZE = UDim2.fromScale(1, 0.157)
+local RARITY_FRAME_POSITION = UDim2.fromScale(0, 0.843)
+local RARITY_FRAME_DEFAULT_BG_COLOR3 = Color3.fromRGB(0, 210, 255)
+
+local RARITY_FRAME_DC_SIZE = UDim2.fromScale(1, 0.455)
+
+local QUANTITY_TAG_SIZE = UDim2.fromScale(0.929, 1)
+local QUANTITY_TAG_DEFAULT_TEXT = "x1"
+local QUANTITY_TAG_TEXT_COLOR3 = Color3.fromRGB(255, 255, 255)
+local QUAMTITY_TAG_TEXT_SIZE = 12
+
+local function ItemSlot(
+	scope: Scope,
+	props: {
+		Index: UsedAs<number>,
+		Data: UsedAs<ItemData>,
+		OnClick: ((itemData: ItemData) -> ())?,
+	}
+): Fusion.Child
+	local itemData = props.Data :: ItemData
+	local isHovered = scope:Value(false)
 
 	-- Hover spring scale for item cards
-	local scaleSpring = Spring(Computed(function()
-		return isHovered:get() and 1.04 or 1.0
-	end), 25, 0.6)
+	local scaleSpring = scope:Spring(
+		scope:Computed(function(use)
+			return use(isHovered) and 1.04 or 1.0
+		end), 25, 0.6)
 
-	return New "ImageButton" {
+	return scope:New "ImageButton" {
 		Name = "Slot_" .. tostring(props.Index),
-		BackgroundColor3 = Color3.fromRGB(35, 42, 68),
+		BackgroundColor3 = ITEM_SLOT_BACKGROUND_COLOR,
 		AutoButtonColor = false,
 
 		[OnEvent "MouseEnter"] = function()
@@ -49,62 +78,61 @@ local function ItemSlot(props: SlotProps)
 		end,
 
 		[Children] = {
-			New "UICorner" {
+			scope:New "UICorner" {
 				CornerRadius = UDim.new(0, 10),
 			},
-			New "UIStroke" {
+			scope:New "UIStroke" {
 				Thickness = 2,
-				Color = Computed(function()
-					return isHovered:get() and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(50, 60, 95)
+				Color = scope:Computed(function(use)
+					return use(isHovered) and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(50, 60, 95)
 				end),
 			},
-			New "UIScale" {
+			scope:New "UIScale" {
 				Scale = scaleSpring,
 			},
 
 			-- Top-Left Tier Tag Badge (e.g. "T1")
-			New "TextLabel" {
-				Size = UDim2.new(0, 45, 0, 18),
-				Position = UDim2.new(0, 6, 0, 6),
-				BackgroundColor3 = Color3.fromRGB(50, 60, 90),
-				Font = Enum.Font.FredokaOne,
-				Text = itemData.Tier or "T1",
-				TextColor3 = Color3.fromRGB(200, 220, 255),
-				TextSize = 11,
+			scope:New "TextLabel" {
+				Size = TIER_TAG_SIZE,
+				Position = TIER_TAG_POSITION,
+				BackgroundColor3 = TIER_TAG_BACKGROUND_COLOR3,
+				FontFace = TEXT_FONT,
+				Text = itemData.Tier or TIER_TAG_DEFAULT_TEXT,
+				TextColor3 = TIER_TAG_TEXT_COLOR3,
+				TextSize = TIER_TAG_TEXT_SIZE,
 
 				[Children] = {
-					New "UICorner" { CornerRadius = UDim.new(0, 6) },
+					scope:New "UICorner" { CornerRadius = UDim.new(0, 6) },
 				},
 			},
 
 			-- Item Display Title
-			New "TextLabel" {
-				Size = UDim2.new(1, -12, 0, 32),
-				Position = UDim2.new(0, 6, 0.45, -10),
+			scope:New "TextLabel" {
+				Size = DISPLAY_SIZE,
+				Position = DISPLAY_POSITION,
 				BackgroundTransparency = 1,
-				Font = Enum.Font.FredokaOne,
-				Text = itemData.Name or "Unknown Item",
-				TextColor3 = Color3.fromRGB(255, 255, 255),
-				TextSize = 13,
+				FontFace = TEXT_FONT,
+				Text = itemData.Name or DISPLAY_DEFUALT_TEXT,
+				TextColor3 = DISPLAY_TEXT_COLOR3,
+				TextSize = DISPLAY_TEXT_SIZE,
 				TextWrapped = true,
 			},
 
 			-- Rarity & Quantity Footer Banner
-			New "Frame" {
-				Size = UDim2.new(1, 0, 0, 22),
-				Position = UDim2.new(0, 0, 1, -22),
-				BackgroundColor3 = itemData.Color or Color3.fromRGB(0, 210, 255),
+			scope:New "Frame" {
+				Size = RARITY_FRAME_SIZE,
+				Position = RARITY_FRAME_POSITION,
+				BackgroundColor3 = itemData.Color or RARITY_FRAME_DEFAULT_BG_COLOR3,
 
 				[Children] = {
-					New "UICorner" { CornerRadius = UDim.new(0, 10) },
+					scope:New "UICorner" { CornerRadius = UDim.new(0, 10) },
 					-- Inner frame to square off top corners of bottom banner
-					New "Frame" {
-						Size = UDim2.new(1, 0, 0, 10),
-						Position = UDim2.new(0, 0, 0, 0),
-						BackgroundColor3 = itemData.Color or Color3.fromRGB(0, 210, 255),
+					scope:New "Frame" {
+						Size = RARITY_FRAME_DC_SIZE,
+						BackgroundColor3 = itemData.Color or RARITY_FRAME_DEFAULT_BG_COLOR3,
 						BorderSizePixel = 0,
 					},
-					New "TextLabel" {
+					scope:New "TextLabel" {
 						Size = UDim2.new(1, -8, 1, 0),
 						BackgroundTransparency = 1,
 						Font = Enum.Font.FredokaOne,
