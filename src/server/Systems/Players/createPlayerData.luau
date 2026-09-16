@@ -20,7 +20,7 @@ local function createPlayerData(world: World)
     for _, player in collectEvents() do
         local playerEntity = world:entity()
         world:set(playerEntity, jecs.Name, "PlayerDataEntity")
-        world:add(playerEntity, replecs.networked)
+        world:add(playerEntity, replecs.Networked)
         world:set(playerEntity, components.Player, player)
         world:add(playerEntity, components.PlayerData)
 

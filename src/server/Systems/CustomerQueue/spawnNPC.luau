@@ -19,6 +19,8 @@ local Phases = PlanckRunService.Phases
 
 type World = Jecs.World
 
+local NPC_COLLISION_GROUP = "NPC"
+
 -- Iterate through friends pages
 local function iterPageItems(pages)
     return coroutine.wrap(function()
@@ -71,6 +73,13 @@ local function spawnNpc(world: World)
             local humanoid = clone:FindFirstChild("Humanoid") :: Humanoid
             clone.Parent = workspace
             
+            -- Set collision group
+            for _, descendant in clone:GetDescendants() do
+                if descendant:IsA("BasePart") then
+                    descendant.CollisionGroup = NPC_COLLISION_GROUP
+                end
+            end
+
             -- Move NPC
             local instance = world:get(spawnId, components.Instance)
             clone:PivotTo(instance.CFrame)

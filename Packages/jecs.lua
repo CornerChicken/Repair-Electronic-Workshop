@@ -1,4 +1,4 @@
-local REQUIRED_MODULE = require(script.Parent._Index["ukendio_jecs@0.10.4"]["jecs"])
+local REQUIRED_MODULE = require(script.Parent._Index["ukendio_jecs@0.11.0"]["jecs"])
 export type Archetype = REQUIRED_MODULE.Archetype 
 export type QueryInner = REQUIRED_MODULE.QueryInner 
 export type Entity<T > = REQUIRED_MODULE.Entity<T >
