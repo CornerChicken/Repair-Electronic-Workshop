@@ -18,6 +18,7 @@ local CurrencyDisplayHud = require("../View//CurrencyDisplayHud")
 local CurrencyDisplay = require("../Components/CurrencyDisplay")
 
 type World = jecs.World
+type Entity = jecs.Entity<any>
 
 local CurrencyDisplayHudController = {}
 
@@ -43,12 +44,22 @@ function CurrencyDisplayHudController.Init(world: World)
 		CurrencyDisplayState.Currencies.Cash:set(value)
 	end
 
-	world:added(components.Cash, function(_entityId, _cashId, value)
-		updateCash(value)
+	world:added(components.Cash, function(entityId: Entity, _cashId, value)
+		if world:has(entityId, components.Player) then
+			local player = world:get(entityId, components.Player)
+			if player == Players.LocalPlayer then
+				updateCash(value)
+			end
+		end
 	end)
 
-	world:changed(components.Cash, function(_entityId, _cashId, value)
-		updateCash(value)
+	world:changed(components.Cash, function(entityId, _cashId, value)
+		if world:has(entityId, components.Player) then
+			local player = world:get(entityId, components.Player)
+			if player == Players.LocalPlayer then
+				updateCash(value)
+			end
+		end
 	end)
 	
 	--[[
