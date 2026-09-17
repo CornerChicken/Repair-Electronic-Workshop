@@ -13,6 +13,7 @@ type Item = ComponentsTypes.Item
 type GameState = ComponentsTypes.GameState
 type WealthStatus = ComponentsTypes.WealthStatus
 type BrokenElectronic = ComponentsTypes.BrokenElectronic
+type PlayerState = ComponentsTypes.PlayerState
 type Queue = QueueType.Queue
 
 export type ComponentsListType = {
@@ -29,6 +30,7 @@ export type ComponentsListType = {
     Player: Jecs.Entity<Player>,
     WealthStatus: Jecs.Entity<WealthStatus>,
     NpcQueue: Jecs.Entity<Queue>,
+    PlayerState: Jecs.Entity<PlayerState>,
 
     -- Tags (components with no data use nil)
     Cable: Jecs.Entity<nil>,
@@ -42,8 +44,10 @@ export type ComponentsListType = {
     NPCSpawn: Jecs.Entity<nil>,
     PlayerData: Jecs.Entity<nil>,
     Spawn: Jecs.Entity<nil>,
-    Npc: Jecs.Entity<nil>,
     InQueue: Jecs.Entity<nil>,
+    Workbench: Jecs.Entity<nil>,
+    ShoppingComputer: Jecs.Entity<nil>,
+    WorkbenchTrigger: Jecs.Entity<nil>,
 }
 
 local ComponentsList = { 
@@ -60,6 +64,7 @@ local ComponentsList = {
         Player = Jecs.component() :: Jecs.Id<Player>,
         WealthStatus = Jecs.component() :: Jecs.Id<WealthStatus>,
         NpcQueue = Jecs.component() :: Jecs.Id<Queue>,
+        PlayerState = Jecs.component() :: Jecs.Id<PlayerState>,
 
         -- Tags
         ElectronicPart = Jecs.tag(),
@@ -74,6 +79,9 @@ local ComponentsList = {
         Spawn = Jecs.tag(),
         Npc = Jecs.tag(),
         InQueue = Jecs.tag(),
+        Workbench = Jecs.tag(),
+        ShoppingComputer = Jecs.tag(),
+        WorkbenchTrigger = Jecs.tag(),
     } :: ComponentsListType
 
 return table.freeze(ComponentsList)

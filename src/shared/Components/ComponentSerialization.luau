@@ -33,7 +33,7 @@ local ComponentSer: { [string]: SerdesTable } = {
             return cash
         end,
         bytespan = 8,
-    }
+    },
 }
 
 -- Load serialization tables

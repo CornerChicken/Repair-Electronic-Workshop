@@ -105,7 +105,14 @@ local function spawnNpc(world: World)
                     
                     if humanoid then
                         humanoid:ApplyDescriptionAsync(humanoidDescription)
-                    end
+
+                            -- Set collision group
+                        for _, descendant in clone:GetDescendants() do
+                            if descendant:IsA("BasePart") then
+                                descendant.CollisionGroup = NPC_COLLISION_GROUP
+                            end
+                        end
+                    end                    
                 else
                     warn("Failed to load appearance for UserId: " .. tostring(randomFriendId))
                 end

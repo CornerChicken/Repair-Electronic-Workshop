@@ -26,11 +26,14 @@ local function createPlayerData(world: World)
 
         -- Add player data components here
         world:set(playerEntity, components.Cash, DEFAULT_CASH)
+        world:set(playerEntity, components.PlayerState, "Idle")
         
         -- Replication to client
         world:add(playerEntity, jecs.pair(replecs.reliable, components.Cash))
         world:add(playerEntity, jecs.pair(replecs.reliable, components.Player))
         world:add(playerEntity, jecs.pair(replecs.reliable, components.PlayerData))
+        world:add(playerEntity, jecs.pair(replecs.reliable, components.Owner))
+        world:add(playerEntity, jecs.pair(replecs.reliable, components.Workbench))
     end
 end
 
