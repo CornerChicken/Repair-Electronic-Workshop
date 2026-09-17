@@ -2,7 +2,6 @@
 local Fusion = require(game:GetService("ReplicatedStorage").Packages.Fusion)
 local InventoryState = require("../State/InventoryState")
 
-local Header = require("../Components/Header")
 local TabButton = require("../Components/TabButton")
 local ItemSlot = require("../Components/ItemSlot")
 

@@ -1,9 +1,8 @@
 --!strict
 --[[
-    Create stats in leaderboard
+    Load inventory UI
 ]]
 
-local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local InventoryController = require("../UI/Controller/InventoryController")
@@ -13,13 +12,11 @@ local Planck = require(Packages.Planck)
 
 local Phase = Planck.Phase
 
-local LocalPlayer = Players.LocalPlayer
-
 local function inventoryController(world)
-    local inventoryController = InventoryController.Init(world)
+    InventoryController.Init(world)
 end
 
 return {
-    system = inventoryController(),
+    system = inventoryController,
     phase = Phase.PreStartup
 }
