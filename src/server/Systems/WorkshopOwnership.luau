@@ -5,11 +5,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Packages = ReplicatedStorage.Packages
 local jecs = require(Packages.jecs)
 local Planck = require(Packages.Planck)
+local replecs = require(Packages.replecs)
 
 local components = require(ReplicatedStorage.Shared.Components.ComponentsList)
 local QueueUtil = require(ReplicatedStorage.Shared.Utilities.QueueUtil)
 
-local Phase = Planck.Phase.Startup
+local Phase = Planck.Phase
 
 type World = jecs.World
 type ComponentsListType = components.ComponentsListType
@@ -36,6 +37,11 @@ local function WorkshopOwnership(world: World)
             world:set(entityId, components.Owner, player)
             world:set(entityId, jecs.Name, "WorkshopEntity")
             world:set(entityId, components.NpcQueue, QueueUtil.createQueue({}))
+
+            world:add(entityId, replecs.Networked)
+            world:add(entityId, jecs.pair(replecs.reliable, components.Instance))
+            world:add(entityId, jecs.pair(replecs.reliable, components.Owner))
+            world:add(entityId, jecs.pair(replecs.reliable, components.Workshop))
             break
         end
     end)
