@@ -4,11 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Packages = ReplicatedStorage.Packages
 local Fusion = require(Packages.Fusion)
 
-local InventoryState = require("../State/InventoryState")
-
 local Children = Fusion.Children
-local peek = Fusion.peek
-local OnEvent = Fusion.OnEvent
 local Child = Fusion.Child
 
 local HEADER_ROTATION = 90

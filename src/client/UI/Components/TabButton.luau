@@ -5,7 +5,6 @@ local Packages = ReplicatedStorage.Packages
 local Fusion = require(Packages.Fusion)
 local Children = Fusion.Children
 local Child = Fusion.Child
-local peek = Fusion.peek
 local OnEvent = Fusion.OnEvent
 
 local InventoryState = require("../State/InventoryState")

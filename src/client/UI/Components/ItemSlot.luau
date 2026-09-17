@@ -41,7 +41,7 @@ local RARITY_FRAME_DC_SIZE = UDim2.fromScale(1, 0.455)
 local QUANTITY_TAG_SIZE = UDim2.fromScale(0.929, 1)
 local QUANTITY_TAG_DEFAULT_TEXT = "x1"
 local QUANTITY_TAG_TEXT_COLOR3 = Color3.fromRGB(255, 255, 255)
-local QUAMTITY_TAG_TEXT_SIZE = 12
+local QUANTITY_TAG_TEXT_SIZE = 12
 
 local function ItemSlot(
 	scope: Scope,
@@ -133,12 +133,12 @@ local function ItemSlot(
 						BorderSizePixel = 0,
 					},
 					scope:New "TextLabel" {
-						Size = UDim2.new(1, -8, 1, 0),
+						Size = QUANTITY_TAG_SIZE,
 						BackgroundTransparency = 1,
-						Font = Enum.Font.FredokaOne,
-						Text = itemData.Qty or "x1",
-						TextColor3 = Color3.fromRGB(255, 255, 255),
-						TextSize = 12,
+						Font = TEXT_FONT,
+						Text = itemData.Qty or QUANTITY_TAG_DEFAULT_TEXT,
+						TextColor3 = QUANTITY_TAG_TEXT_COLOR3,
+						TextSize = QUANTITY_TAG_TEXT_SIZE,
 						TextXAlignment = Enum.TextXAlignment.Right,
 					},
 				},

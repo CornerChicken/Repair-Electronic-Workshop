@@ -36,7 +36,7 @@ local function onCharacterAdded(character)
     character.DescendantAdded:Connect(onDescendantAdded)
 end
 
-local function playerCollisions(world: World)
+local function playerCollisions()
     -- Register collision groups
     workspace:RegisterCollisionGroup(PLAYER_COLLISION_GROUP)
     workspace:RegisterCollisionGroup(NPC_COLLISION_GROUP)
