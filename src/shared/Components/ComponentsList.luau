@@ -43,11 +43,14 @@ export type ComponentsListType = {
     Npc: Jecs.Entity<nil>,
     NPCSpawn: Jecs.Entity<nil>,
     PlayerData: Jecs.Entity<nil>,
+    Client: Jecs.Entity<nil>,
     Spawn: Jecs.Entity<nil>,
     InQueue: Jecs.Entity<nil>,
     Workbench: Jecs.Entity<nil>,
     ShoppingComputer: Jecs.Entity<nil>,
+
     WorkbenchTrigger: Jecs.Entity<nil>,
+    ScrapboxTrigger: Jecs.Entity<nil>,
 }
 
 local ComponentsList = { 
@@ -76,12 +79,15 @@ local ComponentsList = {
         Networked = Jecs.tag(),
         NPCSpawn = Jecs.tag(),
         PlayerData = Jecs.tag(),
+        Client = Jecs.tag(),
         Spawn = Jecs.tag(),
         Npc = Jecs.tag(),
         InQueue = Jecs.tag(),
         Workbench = Jecs.tag(),
         ShoppingComputer = Jecs.tag(),
+        
         WorkbenchTrigger = Jecs.tag(),
+        ScrapboxTrigger = Jecs.tag(),
     } :: ComponentsListType
 
 return table.freeze(ComponentsList)
