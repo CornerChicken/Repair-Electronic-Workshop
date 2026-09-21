@@ -28,3 +28,9 @@ event OnReliableUpdates = {
 		variants: unknown,
 	),
 }
+
+event OnScrapboxTriggered = {
+	from: Client,
+	type: Reliable,
+	call: SingleAsync,
+}

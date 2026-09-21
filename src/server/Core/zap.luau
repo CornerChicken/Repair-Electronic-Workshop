@@ -144,6 +144,9 @@ if not RunService:IsRunning() then
 			FireList = noop,
 			FireSet = noop
 		}),
+		OnScrapboxTriggered = table.freeze({
+			SetCallback = noop
+		}),
 		OnReliableUpdates = table.freeze({
 			Fire = noop,
 			FireAll = noop,
@@ -214,7 +217,7 @@ end
 
 RunService.Heartbeat:Connect(SendEvents)
 
-local reliable_events = table.create(1)
+local reliable_events = table.create(2)
 reliable.OnServerEvent:Connect(function(player, buff, inst)
 	incoming_buff = buff
 	incoming_inst = inst
@@ -223,12 +226,17 @@ reliable.OnServerEvent:Connect(function(player, buff, inst)
 	local len = buffer.len(buff)
 	while incoming_read < len do
 		local id = buffer.readu8(buff, read(1))
-		if id == 0 then -- WaitForServer
-			local call_id = buffer.readu8(buff, read(1))
+		if id == 0 then -- OnScrapboxTriggered
 			local value
 			if reliable_events[0] then
+				task.spawn(reliable_events[0], player, value)
+			end
+		elseif id == 1 then -- WaitForServer
+			local call_id = buffer.readu8(buff, read(1))
+			local value
+			if reliable_events[1] then
 				task.spawn(function(player_2, call_id_2, value_1)
-					local ret_1, ret_2 = reliable_events[0](player_2, value_1)
+					local ret_1, ret_2 = reliable_events[1](player_2, value_1)
 					load_player(player_2)
 					alloc(1)
 					buffer.writeu8(outgoing_buff, outgoing_apos, 1)
@@ -264,9 +272,9 @@ local returns = {
 	SendEvents = SendEvents,
 	WaitForServer = {
 		SetCallback = function(Callback: (Player: Player) -> (((buffer)?), ((unknown)))): () -> ()
-			reliable_events[0] = Callback
+			reliable_events[1] = Callback
 			return function()
-				reliable_events[0] = nil
+				reliable_events[1] = nil
 			end
 		end,
 	},
@@ -409,6 +417,14 @@ local returns = {
 				load(saved)
 				buffer.writeu16(buff, order_id_apos, order_id)
 				unreliable[1]:FireClient(player, buff, outgoing_inst)
+			end
+		end,
+	},
+	OnScrapboxTriggered = {
+		SetCallback = function(Callback: (Player: Player) -> ()): () -> ()
+			reliable_events[0] = Callback
+			return function()
+				reliable_events[0] = nil
 			end
 		end,
 	},

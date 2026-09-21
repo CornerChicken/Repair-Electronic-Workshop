@@ -14,19 +14,18 @@ local Phase = Planck.Phase
 
 local function createPrompt(world)
     task.spawn(function()
-            world:added(components.Client, function(entity)
-                local workshopInstance = world:get(entity, components.Instance) :: Instance
-                local scrapbox = workshopInstance:WaitForChild("Scrapbox")
+        world:added(components.Client, function(entity)
+            local workshopInstance = world:get(entity, components.Instance) :: Instance
+            local scrapbox = workshopInstance:WaitForChild("Scrapbox")
 
-                local prompt = Instance.new("ProximityPrompt")
-                prompt.ActionText = "Use"
-                prompt.ObjectText = "Scrapbox"
-                prompt.KeyboardKeyCode = Enum.KeyCode.E
-                prompt.HoldDuration = 0.5
-                prompt.Parent = scrapbox
+            local prompt = Instance.new("ProximityPrompt")
+            prompt.ActionText = "Use"
+            prompt.ObjectText = "Scrapbox"
+            prompt.KeyboardKeyCode = Enum.KeyCode.E
+            prompt.HoldDuration = 0.5
+            prompt.Parent = scrapbox
 
-                prompt.Triggered:Connect(function(player)
-                print("Scrapbox triggered by: ", player)
+            prompt.Triggered:Connect(function()
                 world:add(entity, components.ScrapboxTrigger)
             end)
         end)

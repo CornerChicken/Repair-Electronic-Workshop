@@ -138,6 +138,9 @@ if not RunService:IsRunning() then
 		OnUnreliableUpdates = table.freeze({
 			SetCallback = noop
 		}),
+		OnScrapboxTriggered = table.freeze({
+			Fire = noop
+		}),
 		OnReliableUpdates = table.freeze({
 			SetCallback = noop
 		}),
@@ -275,7 +278,7 @@ local returns = {
 				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
 			end
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, 0)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 1)
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
 			reliable_event_queue[1][function_call_id] = coroutine.running()
@@ -292,6 +295,12 @@ local returns = {
 			return function()
 				unreliable_events[0] = nil
 			end
+		end,
+	},
+	OnScrapboxTriggered = {
+		Fire = function()
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 0)
 		end,
 	},
 	OnReliableUpdates = {
