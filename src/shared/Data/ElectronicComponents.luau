@@ -13,7 +13,7 @@ local globalTypes = require("./GlobalTypes")
 
 type Rarity = globalTypes.Rarity
 
-type ElectronicComponent = {
+export type ElectronicComponent = {
     rarity: Rarity,
     cost: number,
     value: number
